@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import axios from 'axios';
 import '../../styles/create-food.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const CreateFood = () => {
     const [ name, setName ] = useState('');
@@ -66,8 +66,8 @@ const CreateFood = () => {
 
             navigate("/");
         } catch (err) {
-            if (err.response?.status === 401) {
-                navigate("/food-partner/login");
+            if (err.response?.status === 401 || err.response?.status === 403) {
+                setSubmitError(err.response?.data?.message || 'Access denied. You must be logged in as a Food Partner to upload food reels.');
             } else {
                 setSubmitError(err.response?.data?.message || 'Failed to upload food reel. Please try again.');
             }
@@ -165,7 +165,14 @@ const CreateFood = () => {
                         />
                     </div>
 
-                    {submitError && <p className="error-text" role="alert" style={{ marginBottom: '12px' }}>{submitError}</p>}
+                    {submitError && (
+                        <div style={{ marginBottom: '16px', background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.4)', borderRadius: '8px', padding: '12px', color: '#ff6b6b', fontSize: '14px', lineHeight: 1.5 }}>
+                            <p style={{ margin: 0, fontWeight: 500 }}>{submitError}</p>
+                            <p style={{ margin: '6px 0 0 0' }}>
+                                👉 <Link to="/food-partner/login" style={{ color: '#fff', textDecoration: 'underline', fontWeight: 600 }}>Login as Food Partner</Link> or <Link to="/food-partner/register" style={{ color: '#fff', textDecoration: 'underline', fontWeight: 600 }}>Register Business</Link>
+                            </p>
+                        </div>
+                    )}
 
                     <div className="form-actions">
                         <button className="btn-primary" type="submit" disabled={isDisabled || loading}>

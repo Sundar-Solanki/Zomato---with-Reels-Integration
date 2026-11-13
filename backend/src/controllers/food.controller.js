@@ -6,20 +6,38 @@ const { v4: uuid } = require("uuid")
 
 
 async function createFood(req, res) {
-    const fileUploadResult = await storageService.uploadFile(req.file.buffer, uuid())
+    try {
+        if (!req.foodPartner) {
+            return res.status(403).json({
+                message: "Access denied. Please login as a Food Partner to post reels."
+            });
+        }
 
-    const foodItem = await foodModel.create({
-        name: req.body.name,
-        description: req.body.description,
-        video: fileUploadResult.url,
-        foodPartner: req.foodPartner._id
-    })
+        if (!req.file) {
+            return res.status(400).json({
+                message: "Please attach a valid video file."
+            });
+        }
 
-    res.status(201).json({
-        message: "food created successfully",
-        food: foodItem
-    })
+        const fileUploadResult = await storageService.uploadFile(req.file.buffer, uuid())
 
+        const foodItem = await foodModel.create({
+            name: req.body.name,
+            description: req.body.description,
+            video: fileUploadResult.url,
+            foodPartner: req.foodPartner._id
+        })
+
+        res.status(201).json({
+            message: "food created successfully",
+            food: foodItem
+        })
+    } catch (error) {
+        console.error("Error creating food reel:", error);
+        res.status(500).json({
+            message: error.message || "Failed to upload food reel"
+        });
+    }
 }
 
 async function getFoodItems(req, res) {

@@ -103,3 +103,4 @@ zomato-clone/
 ## Author
 
 - **Sundar Solanki** ([sundar.solanki5555@gmail.com](mailto:sundar.solanki5555@gmail.com))
+

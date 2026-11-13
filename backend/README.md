@@ -34,3 +34,4 @@ Express.js REST API for Zomato Clone.
 ## Author
 
 - **Sundar Solanki** ([sundar.solanki5555@gmail.com](mailto:sundar.solanki5555@gmail.com))
+

@@ -12,10 +12,13 @@ async function getFoodPartnerById(req, res) {
         return res.status(404).json({ message: "Food partner not found" });
     }
 
+    const partnerObj = foodPartner.toObject();
+    delete partnerObj.password;
+
     res.status(200).json({
         message: "Food partner retrieved successfully",
         foodPartner: {
-            ...foodPartner.toObject(),
+            ...partnerObj,
             foodItems: foodItemsByFoodPartner
         }
 

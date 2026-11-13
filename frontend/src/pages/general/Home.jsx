@@ -1,46 +1,54 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/reels.css'
 import ReelFeed from '../../components/ReelFeed'
 
 const Home = () => {
     const [ videos, setVideos ] = useState([])
-    // Autoplay behavior is handled inside ReelFeed
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get("http://localhost:3000/api/food", { withCredentials: true })
             .then(response => {
-
-                console.log(response.data);
-
-                setVideos(response.data.foodItems)
+                setVideos(response.data.foodItems || [])
             })
-            .catch(() => { /* noop: optionally handle error */ })
-    }, [])
-
-    // Using local refs within ReelFeed; keeping map here for dependency parity if needed
+            .catch((err) => {
+                if (err.response?.status === 401) {
+                    navigate("/user/login");
+                }
+            })
+    }, [navigate])
 
     async function likeVideo(item) {
+        try {
+            const response = await axios.post("http://localhost:3000/api/food/like", { foodId: item._id }, { withCredentials: true })
 
-        const response = await axios.post("http://localhost:3000/api/food/like", { foodId: item._id }, {withCredentials: true})
-
-        if(response.data.like){
-            console.log("Video liked");
-            setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, likeCount: v.likeCount + 1 } : v))
-        }else{
-            console.log("Video unliked");
-            setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, likeCount: v.likeCount - 1 } : v))
+            if(response.data.like){
+                setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, likeCount: (v.likeCount || 0) + 1 } : v))
+            }else{
+                setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, likeCount: Math.max(0, (v.likeCount || 1) - 1) } : v))
+            }
+        } catch (err) {
+            if (err.response?.status === 401) {
+                navigate("/user/login");
+            }
         }
-        
     }
 
     async function saveVideo(item) {
-        const response = await axios.post("http://localhost:3000/api/food/save", { foodId: item._id }, { withCredentials: true })
-        
-        if(response.data.save){
-            setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, savesCount: v.savesCount + 1 } : v))
-        }else{
-            setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, savesCount: v.savesCount - 1 } : v))
+        try {
+            const response = await axios.post("http://localhost:3000/api/food/save", { foodId: item._id }, { withCredentials: true })
+            
+            if(response.data.save){
+                setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, savesCount: (v.savesCount || 0) + 1 } : v))
+            }else{
+                setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, savesCount: Math.max(0, (v.savesCount || 1) - 1) } : v))
+            }
+        } catch (err) {
+            if (err.response?.status === 401) {
+                navigate("/user/login");
+            }
         }
     }
 

@@ -9,6 +9,8 @@ const CreateFood = () => {
     const [ videoFile, setVideoFile ] = useState(null);
     const [ videoURL, setVideoURL ] = useState('');
     const [ fileError, setFileError ] = useState('');
+    const [ loading, setLoading ] = useState(false);
+    const [ submitError, setSubmitError ] = useState('');
     const fileInputRef = useRef(null);
 
     const navigate = useNavigate();
@@ -49,21 +51,29 @@ const CreateFood = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setSubmitError('');
 
-        const formData = new FormData();
+        try {
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('description', description);
+            formData.append("mama", videoFile);
 
-        formData.append('name', name);
-        formData.append('description', description);
-        formData.append("mama", videoFile);
+            await axios.post("http://localhost:3000/api/food", formData, {
+                withCredentials: true,
+            });
 
-        const response = await axios.post("http://localhost:3000/api/food", formData, {
-            withCredentials: true,
-        })
-
-        console.log(response.data);
-        navigate("/"); // Redirect to home or another page after successful creation
-        // Optionally reset
-        // setName(''); setDescription(''); setVideoFile(null);
+            navigate("/");
+        } catch (err) {
+            if (err.response?.status === 401) {
+                navigate("/food-partner/login");
+            } else {
+                setSubmitError(err.response?.data?.message || 'Failed to upload food reel. Please try again.');
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
     const isDisabled = useMemo(() => !name.trim() || !videoFile, [ name, videoFile ]);
@@ -155,9 +165,11 @@ const CreateFood = () => {
                         />
                     </div>
 
+                    {submitError && <p className="error-text" role="alert" style={{ marginBottom: '12px' }}>{submitError}</p>}
+
                     <div className="form-actions">
-                        <button className="btn-primary" type="submit" disabled={isDisabled}>
-                            Save Food
+                        <button className="btn-primary" type="submit" disabled={isDisabled || loading}>
+                            {loading ? 'Uploading...' : 'Save Food'}
                         </button>
                     </div>
                 </form>

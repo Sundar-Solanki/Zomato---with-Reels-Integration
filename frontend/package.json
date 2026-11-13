@@ -1,7 +1,7 @@
 {
-  "name": "zomato-clone-frontend",
+  "name": "zomato-reels-frontend",
   "version": "1.0.0",
-  "description": "Frontend for Zomato Clone application",
+  "description": "Frontend for Zomato - with Reels Integration",
   "author": "Sundar Solanki <sundar.solanki5555@gmail.com>",
   "private": true,
   "type": "module",

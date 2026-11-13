@@ -28,3 +28,8 @@ Thumbs.db
 .idea/
 .vscode/
 *.swp
+
+# Private interview notes & documentation
+INTERVIEW_QUESTIONS_AND_PROJECT_DETAILS.md
+*interview*
+

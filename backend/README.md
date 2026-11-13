@@ -1,6 +1,6 @@
-# Zomato Clone - Backend
+# Zomato - with Reels Integration - Backend
 
-Express.js REST API for Zomato Clone.
+Express.js REST API for Zomato - with Reels Integration.
 
 ## Features
 - User & Food Partner Authentication (JWT + bcryptjs)

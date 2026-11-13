@@ -1,6 +1,6 @@
-# Zomato Clone - Frontend
+# Zomato - with Reels Integration - Frontend
 
-Vite + React single-page application for Zomato Clone.
+Vite + React single-page application for Zomato - with Reels Integration.
 
 ## Scripts
 

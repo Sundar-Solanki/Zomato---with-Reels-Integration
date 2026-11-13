@@ -1,6 +1,6 @@
-# Zomato Clone
+# Zomato - with Reels Integration
 
-A full-stack food reels and discovery platform built with React, Node.js, Express, and MongoDB.
+A full-stack food discovery and vertical video reels platform built with React, Node.js, Express, and MongoDB.
 
 ## Features
 

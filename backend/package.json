@@ -1,7 +1,7 @@
 {
-  "name": "zomato-clone-backend",
+  "name": "zomato-reels-backend",
   "version": "1.0.0",
-  "description": "Backend API for Zomato Clone application",
+  "description": "Backend API for Zomato - with Reels Integration",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -9,9 +9,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "zomato-clone",
-    "food-view",
-    "reels",
+    "zomato",
+    "reels-integration",
+    "food-reels",
     "express",
     "mongodb"
   ],
